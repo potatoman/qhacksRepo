@@ -1,0 +1,119 @@
+.output {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-left: 1vw;
+}
+.output h1 {
+    font-weight: bolder;
+    color: #00C8FF;
+}
+.output-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
+
+.output-chat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   
+    justify-content: space-between;
+
+    padding-bottom: 0.8vw;
+    
+    width: 23vw;
+    height: 43vw;
+
+    border-radius: 35px;
+
+    background-color: #292929;
+}
+.chats {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+
+    padding: 1vw;
+    padding-top: 2vw;
+
+    width: 80%;
+    height: calc(80% of 23vw);
+
+    overflow-y: auto; /* Add a scroll bar */
+    flex-grow: 1; /* Allow chats to grow and take available space */
+}
+.ai-out {
+    width: 60%;
+    height: auto;
+
+    align-self: flex-start;
+
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    border-radius: 35px;
+
+    background-color: #00C8FF;
+
+    text-align: left;
+}
+.usr-in {
+    width: 60%;
+    height: auto;
+
+    align-self: flex-end;
+
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    border-radius: 35px;
+
+    background-color: #0F0F0F;
+    color: white;
+
+    text-align: left;
+}
+
+.output-chat textarea {
+    width: 80%;
+    height: 20px; 
+
+    margin: 0;
+    padding: 0;
+
+    padding: 20px;
+    padding-left: 25px;
+
+
+    border-style: none;
+    outline: none;
+    resize: none;
+
+    border-radius: 35px;
+
+    background-color: #0F0F0F;
+    color: white;
+
+    overflow: hidden; /* Hide the scroll bar */
+}
+.output-showcase {
+    width: 72vw;
+    height: 45vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 35px;
+
+    background-color: #292929;
+}
+.output-showcase object {
+    width: 90%;
+    height: 90%;
+    border: none;
+}
