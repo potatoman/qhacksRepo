@@ -73,6 +73,8 @@ function Home() {
     } catch (error) {
       console.error('Error while uploading files:', error)
     }
+    // Navigate to /output
+    window.location.href = '/output'
   }
 
   return (

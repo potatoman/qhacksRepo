@@ -20,8 +20,20 @@ const Output = (props) => {
             setChats([...chats, ['usr-in' ,text]]);
             setText('');
             handleSubmit(event);
+            setTimeout(() => {
+                console.log('Chat cooldown finished.');
+            }, 10000);
         }
     };
+    const handleSendPress = (event) => {
+        event.preventDefault();
+        setChats([...chats, ['usr-in' ,text]]);
+        setText('');
+        handleSubmit(event);
+        setTimeout(() => {
+            console.log('Chat cooldown finished.');
+        }, 10000);
+    }
 
     return (
         <div className='output'>
@@ -44,7 +56,7 @@ const Output = (props) => {
                             onChange={(event) => setText(event.target.value)}
                             onKeyDown={handleKeyPress}>
                         </textarea>
-                        <button className='output-chat-button' type='submit'>Send</button>
+                        <button className='output-chat-button' onClick={handleSendPress}>Send</button>
                     </form>
 
                 </div>
