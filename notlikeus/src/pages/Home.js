@@ -1,8 +1,11 @@
 import '../css/Home.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import pdfToText from 'react-pdftotext'
+
 
 function Home() {
+  
   const navigate = useNavigate()
   const [files, setFiles] = useState({
     assignment: null,
@@ -12,12 +15,45 @@ function Home() {
   const [subject, setSubject] = useState('Business')
   const [difficulty, setDifficulty] = useState(1)
 
-  const handleFileChange = (event) => {
+  const [assignmentText, setAssignmentText] = useState('')
+  const [outlineText, setOutlineText] = useState('')
+  const [rubricText, setRubricText] = useState('')
+
+  const handleAssignmentChange = (event) => {
     const { id, files } = event.target
     setFiles((prevFiles) => ({
       ...prevFiles,
       [id]: files[0] || null, // Store the first selected file or null
     }))
+    
+    const file = event.target.files[0]
+    pdfToText(file)
+        .then(text => setAssignmentText(text))
+        .catch(error => console.error("Failed to extract text from pdf"))
+  }
+  const handleOutlineChange = (event) => {
+    const { id, files } = event.target
+    setFiles((prevFiles) => ({
+      ...prevFiles,
+      [id]: files[0] || null, // Store the first selected file or null
+    }))
+    
+    const file = event.target.files[0]
+    pdfToText(file)
+        .then(text => setOutlineText(text))
+        .catch(error => console.error("Failed to extract text from pdf"))
+  }
+  const handleRubricChange = (event) => {
+    const { id, files } = event.target
+    setFiles((prevFiles) => ({
+      ...prevFiles,
+      [id]: files[0] || null, // Store the first selected file or null
+    }))
+    
+    const file = event.target.files[0]
+    pdfToText(file)
+        .then(text => setRubricText(text))
+        .catch(error => console.error("Failed to extract text from pdf"))
   }
 
   //   console.log(file1Element)
@@ -41,22 +77,27 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const formData = new FormData()
+    // Parse each PDF into text on the client side
 
-    // append files to the formdata object
+    // Prepare FormData
+    const formData = new FormData()
+    // Append original files (if you still want to send the PDFs themselves)
     formData.append('assignment', files.assignment)
     formData.append('outline', files.outline)
     formData.append('rubric', files.rubric)
-    if (difficulty == 1) {
-      formData.append('difficulty', 'chill')
-    } else if (difficulty == 2) {
-      formData.append('difficulty', 'fair')
-    } else if (difficulty == 3) {
-      formData.append('difficulty', 'harsh')
-    }
-    formData.append('subject', subject)
 
-    console.log(formData)
+    formData.append('assignmentText', assignmentText)
+    formData.append('outlineText', outlineText)
+    formData.append('rubricText', rubricText)
+
+    // Append difficulty
+    let difficultyLabel = 'chill'
+    if (difficulty === '2') difficultyLabel = 'fair'
+    if (difficulty === '3') difficultyLabel = 'harsh'
+    formData.append('difficulty', difficultyLabel)
+
+    // Append subject
+    formData.append('subject', subject)
 
     try {
       const response = await fetch('http://localhost:5001/api/intro', {
@@ -65,7 +106,7 @@ function Home() {
       })
 
       if (response.ok) {
-        console.log('Files uploaded successfully!')
+        console.log('Files (and text) uploaded successfully!')
         navigate('/output')
       } else {
         console.error('File upload failed.')
@@ -73,9 +114,8 @@ function Home() {
     } catch (error) {
       console.error('Error while uploading files:', error)
     }
-    // Navigate to /output
-    window.location.href = '/output'
   }
+
 
   return (
     <div className="App">
@@ -101,7 +141,7 @@ function Home() {
             type="file"
             id="assignment"
             className="fileUpload"
-            onChange={handleFileChange}
+            onChange={handleAssignmentChange}
           />
 
           <div className="subheader">Assignment Instructions</div>
@@ -112,7 +152,7 @@ function Home() {
             type="file"
             id="outline"
             className="fileUpload"
-            onChange={handleFileChange}
+            onChange={handleOutlineChange}
           />
 
           <div className="subheader">Assignment Rubric</div>
@@ -123,7 +163,7 @@ function Home() {
             type="file"
             id="rubric"
             className="fileUpload"
-            onChange={handleFileChange}
+            onChange={handleRubricChange}
           />
         </div>
       </form>
