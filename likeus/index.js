@@ -1,9 +1,7 @@
-import express from "express"
-import dotenv from "dotenv"
+import express from "express";
+import dotenv from "dotenv";
 import OpenAI from "openai";
-import fs from "fs"
-import pdfParse from 'pdf-parse';
-import pdf from 'pdf-parse'
+import pdfUtil from 'pdf-to-text';
 
 // initialize dotenv to load env vars
 dotenv.config();
@@ -12,9 +10,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const openai = new OpenAI({
-    organization: process.env.ORGANIZATION,
-    project: process.env.PROJECT,
-    apiKey: process.env.KEY
+  organization: process.env.ORGANIZATION,
+  project: process.env.PROJECT,
+  apiKey: process.env.KEY
 });
 
 // middleware to parse incoming json requests
@@ -30,34 +28,24 @@ app.get("/api/example", (req, res) => {
   res.json({ message: "example endpoint" });
 });
 
+// // TODO step 1 & 2 & 3
+// const dataBuffer = fs.readFileSync("./sample.pdf");
+
+// pdfParse(dataBuffer).then((data) => {
+//   console.log("PDF Text Content:");
+//   console.log(data.text);
+// });
+
 // start the server
 app.listen(PORT, () => {
-  console.log('server is running on http://localhost:${PORT}');
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-// 1. Read PDF file
 
-
-// Function to extract text from a PDF file
-const parsePdf = async (filePath) => {
-    try {
-      // Read the PDF file
-      const pdfBuffer = fs.readFileSync(filePath);
-  
-      // Extract text using pdf-parse
-      const pdfData = await pdfParse(pdfBuffer);
-  
-      // Log the extracted text
-      console.log("Extracted Text:\n", pdfData.text);
-    } catch (error) {
-      console.error("Error parsing PDF:", error);
-    }
-  };
-  
-// Specify the path to the PDF file
-const pdfFilePath = './sample.pdf'; // Replace with your PDF file path
-
-// Call the function
-parsePdf(pdfFilePath);
+var pdf_path = "./sample.pdf";
+pdfUtil.pdfToText(pdf_path, function(err, data) {
+  if (err) throw(err);
+  console.log(data); //print all text    
+});
 
 // async function main() {
 //     const stream = await openai.chat.completions.create({
