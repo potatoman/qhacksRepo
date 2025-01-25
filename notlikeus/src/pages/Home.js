@@ -3,9 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import pdfToText from 'react-pdftotext'
 
-
 function Home() {
-  
   const navigate = useNavigate()
   const [files, setFiles] = useState({
     assignment: null,
@@ -25,11 +23,11 @@ function Home() {
       ...prevFiles,
       [id]: files[0] || null, // Store the first selected file or null
     }))
-    
+
     const file = event.target.files[0]
     pdfToText(file)
-        .then(text => setAssignmentText(text))
-        .catch(error => console.error("Failed to extract text from pdf"))
+      .then((text) => setAssignmentText(text))
+      .catch((error) => console.error('Failed to extract text from pdf'))
   }
   const handleOutlineChange = (event) => {
     const { id, files } = event.target
@@ -37,11 +35,11 @@ function Home() {
       ...prevFiles,
       [id]: files[0] || null, // Store the first selected file or null
     }))
-    
+
     const file = event.target.files[0]
     pdfToText(file)
-        .then(text => setOutlineText(text))
-        .catch(error => console.error("Failed to extract text from pdf"))
+      .then((text) => setOutlineText(text))
+      .catch((error) => console.error('Failed to extract text from pdf'))
   }
   const handleRubricChange = (event) => {
     const { id, files } = event.target
@@ -49,11 +47,11 @@ function Home() {
       ...prevFiles,
       [id]: files[0] || null, // Store the first selected file or null
     }))
-    
+
     const file = event.target.files[0]
     pdfToText(file)
-        .then(text => setRubricText(text))
-        .catch(error => console.error("Failed to extract text from pdf"))
+      .then((text) => setRubricText(text))
+      .catch((error) => console.error('Failed to extract text from pdf'))
   }
 
   //   console.log(file1Element)
@@ -115,7 +113,6 @@ function Home() {
       console.error('Error while uploading files:', error)
     }
   }
-
 
   return (
     <div className="App">
