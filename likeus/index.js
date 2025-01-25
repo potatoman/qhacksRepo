@@ -28,34 +28,21 @@ app.get("/api/example", (req, res) => {
   res.json({ message: "example endpoint" });
 });
 
-// // TODO step 1 & 2 & 3
-// const dataBuffer = fs.readFileSync("./sample.pdf");
-
-// pdfParse(dataBuffer).then((data) => {
-//   console.log("PDF Text Content:");
-//   console.log(data.text);
-// });
-
-
 // start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-
-
-
-// var pdf_path = "./sample.pdf";
-// pdfUtil.pdfToText(pdf_path, function(err, data) {
-//   if (err) throw(err);
-//   console.log(data); //print all text    
-// });
-
-async function pdfText(file) {
-  pdfUtil.pdfToText(pdf_path, function(err, data) {
-    if (err) throw(err);
-    return (data); //print all text    
-  });
+function pdfText(file){
+  return new Promise((resolve, reject) => {
+    pdfUtil.pdfToText(file, function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    })
+  })
 }
 
 
@@ -63,7 +50,7 @@ async function callGPT(subject, difficulty, rubric, submission, outline) {
     const stream = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [{ 
-            role: "system", 
+            role: "user", 
             content: 
             `You are an expert in ${subject} and are known as a ${difficulty} marker. You are grading the assignment and rubric that will be provided. What grade would you provide the submission based off of the rubric? Please provide only a numeric grade for this section and nothing else.
             Provide a brief explanation as to which level is best met for each criteria along with the numeric grade you would give.
@@ -73,7 +60,7 @@ async function callGPT(subject, difficulty, rubric, submission, outline) {
             Here is the submission text: ${submission}.
             Here is the rubric: ${rubric}.
             `,
-            role: "user", content: "Hi"
+            // role: "user", content: "Hi"
         }],
         store: true,
         stream: true,
@@ -84,11 +71,11 @@ async function callGPT(subject, difficulty, rubric, submission, outline) {
 
 app.post('/api/intro', async (req, res) => {
     try{
-      subject, difficulty, rubric, submission, outline = req.body
-      parsed_rubric = pdfText(rubric)
-      parsed_submission = pdfText(submission)
-      parsed_outline = pdfText(outline)
-      stream = callGPT(subject, difficulty, parsed_rubric, parsed_submission, parse_outline);
+      let subject, difficulty, rubric, submission, outline = req.body
+      const parsed_rubric = await pdfText(rubric)
+      const parsed_submission = await pdfText(submission)
+      const parsed_outline = await pdfText(outline)
+      const stream = await callGPT(subject, difficulty, parsed_rubric, parsed_submission, parsed_outline);
       for await (const chunk of stream) {
         process.stdout.write(chunk.choices[0]?.delta?.content || "");
     }
