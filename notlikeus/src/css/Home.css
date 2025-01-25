@@ -8,6 +8,7 @@
   
   .title {
     margin-top: 100px;
+    margin-bottom: 0px;
     font-size: 100px;
     font-family: "Josefin Sans", sans-serif;
     color: #000080;
@@ -15,6 +16,7 @@
   }
   
   .title2 {
+    margin: 0;
     font-size: 100px;
     font-family: "Josefin Sans", sans-serif;
     color: #00C8FF;
@@ -26,7 +28,11 @@
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    font-size: 12px;
+    margin-top: 5px;
+    font-size: 20px;
+    font-weight: 700;
+
+    user-select: none;
   }
   
   .container {
@@ -48,7 +54,6 @@
     color: #000080;
     font-size: 20px;
   }
-  
   .fileUpload {
     display: none;
   }
@@ -108,5 +113,25 @@
     width: 100%;
     letter-spacing: 2px;
     font-family: "Josefin Sans", sans-serif;
+    font-weight: bold;
     color: #000080;
+
+    transition: 200ms ease;
+  }
+
+  .submitButton:hover {
+    background-color: #000080;
+    color: #00C8FF;
+
+    animation: fadeInOutShadow 1.75s infinite;
+    transition: 200ms ease;
+  }
+
+  @keyframes fadeInOutShadow {
+    0%, 100% {
+      box-shadow: 0 0 0 rgba(0, 229, 255, 0);
+    }
+    50% {
+      box-shadow: 0 0 60px rgba(0, 229, 255, 1);
+    }
   }

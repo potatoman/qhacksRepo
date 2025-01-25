@@ -16,6 +16,12 @@ function Home() {
     }))
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    // Send the selected files to the server
+    console.log(selectedFiles)
+  }
+
   return (
     <div className="App">
       <div className="titleContainer">
@@ -23,7 +29,7 @@ function Home() {
           REV<span className="title2">AI</span>SE
         </h1>
       </div>
-      <div className="container">
+      <form className="container" onSubmit={handleSubmit}>
         <div className="subheader">Subject</div>
         <select className="dropDown">
           <option value="option1">Business</option>
@@ -77,8 +83,8 @@ function Home() {
           </div>
         </div>
 
-        <button className="submitButton">REVAISE</button>
-      </div>
+        <button className="submitButton" type="submit">REVAISE</button>
+      </form>
     </div>
   )
 }
