@@ -37,6 +37,10 @@ app.get('/', (req, res) => {
 app.get('/api/output', (req, res) => {
   res.json({ message: output })
 })
+app.get('/api/displaytext', (req, res) => {
+  res.json({ message: submission })
+})
+
 app.post('/api/followup', async (req, res) => {
   output = ''
   console.log('followup body', req.body)

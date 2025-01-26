@@ -1,5 +1,7 @@
 import { React, useEffect, useState } from 'react'
 import '../css/Output.css'
+import {createRoot} from 'react-dom/client'
+import Markdown from 'react-markdown'
 
 import placeholderpdf from '../assets/placeholder.pdf'
 
@@ -82,13 +84,13 @@ const Output = (props) => {
 
   return (
     <div className="output">
-      <h1>REVAISE</h1>
+      <a href='/'>REV<span>AI</span>SE.co</a>
       <div className="output-container">
         <div className="output-chat">
           <div className="chats">
             {chats.map((chat, index) => (
               <div key={index} className={chat[0]}>
-                {chat[1]}
+                <Markdown>{chat[1]}</Markdown>
               </div>
             ))}
           </div>
@@ -106,15 +108,7 @@ const Output = (props) => {
             </button>
           </form>
         </div>
-        <div className="output-showcase">
-          {/* <object className="pdf" data={placeholderpdf} type="application/pdf">
-            <a href={placeholderpdf} download={placeholderpdf}>
-              <p>COULD NOT RENDER THE PDF, CLICK TO VIEW</p>
-            </a>
-          </object> */}
-          <h1>RAW TEXT OF ASSIGNMENT:</h1>
-          <h3>{subText}</h3>
-        </div>
+
       </div>
     </div>
   )
