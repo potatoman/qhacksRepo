@@ -6,8 +6,7 @@ import placeholderpdf from '../assets/placeholder.pdf'
 const Output = (props) => {
   const [text, setText] = useState('')
   const [chats, setChats] = useState([])
-
-  const [output, setOutput] = useState('')
+  const [sentMsg, setSentMsg] = useState(false)
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -15,24 +14,26 @@ const Output = (props) => {
     async function fetchFollowup() {
       console.log(chats)
       const message = chats[chats.length - 1][1]
+      console.log(message)
       const response = await fetch('http://localhost:5001/api/followup', {
         method: 'POST',
         body: message,
       })
       const data = await response.json()
-      setOutput(data.message)
-      setChats([...chats, ['ai-out', output]])
+      setChats([...chats, ['ai-out', data.message]])
     }
-    if (count > 0 && chats.length > 0) {
+    if (count > 0 && chats.length > 0 && sentMsg) {
       fetchFollowup()
+      setSentMsg(false)
     }
-  }, [chats])
+  }, [sentMsg])
 
   useEffect(() => {
     console.log('in output')
     async function fetchOutput() {
       const response = await fetch('http://localhost:5001/api/output', {})
       const data = await response.json()
+      console.log(data.message)
       setChats([...chats, ['ai-out', data.message]])
     }
     if (count == 0) {
@@ -54,6 +55,7 @@ const Output = (props) => {
       setChats([...chats, ['usr-in', text]])
       setText('')
       handleSubmit(event)
+      setSentMsg(true)
       setTimeout(() => {
         console.log('Chat cooldown finished.')
       }, 10000)
@@ -64,6 +66,7 @@ const Output = (props) => {
     setChats([...chats, ['usr-in', text]])
     setText('')
     handleSubmit(event)
+    setSentMsg(true)
     setTimeout(() => {
       console.log('Chat cooldown finished.')
     }, 10000)
