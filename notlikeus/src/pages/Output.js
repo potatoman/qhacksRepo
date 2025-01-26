@@ -8,6 +8,7 @@ const Output = (props) => {
   const [chats, setChats] = useState([])
   const [sentMsg, setSentMsg] = useState(false)
   const [count, setCount] = useState(0)
+  const [subText, setSubText] = useState('')
 
   useEffect(() => {
     console.log('in followup')
@@ -28,6 +29,7 @@ const Output = (props) => {
     }
   }, [sentMsg])
 
+
   useEffect(() => {
     console.log('in output')
     async function fetchOutput() {
@@ -35,6 +37,12 @@ const Output = (props) => {
       const data = await response.json()
       console.log(data.message)
       setChats([...chats, ['ai-out', data.message]])
+
+      const response2 = await fetch('http://localhost:5001/api/displaytext', {})
+      const data2 = await response2.json()
+      console.log(data2)
+      setSubText(data2.message)
+
     }
     if (count == 0) {
       fetchOutput()
@@ -99,11 +107,13 @@ const Output = (props) => {
           </form>
         </div>
         <div className="output-showcase">
-          <object className="pdf" data={placeholderpdf} type="application/pdf">
+          {/* <object className="pdf" data={placeholderpdf} type="application/pdf">
             <a href={placeholderpdf} download={placeholderpdf}>
               <p>COULD NOT RENDER THE PDF, CLICK TO VIEW</p>
             </a>
-          </object>
+          </object> */}
+          <h1>RAW TEXT OF ASSIGNMENT:</h1>
+          <h3>{subText}</h3>
         </div>
       </div>
     </div>
